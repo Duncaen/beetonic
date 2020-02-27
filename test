@@ -1,0 +1,30 @@
+CREATE TABLE albums (id INTEGER PRIMARY KEY, genre TEXT);
+
+INSERT INTO albums (genre) 
+VALUES
+('fizz'),
+('foo'),
+('bar'),
+('bar'),
+('bar'),
+('bar') ;
+
+CREATE TABLE items (id INTEGER PRIMARY KEY, genre TEXT);
+
+INSERT INTO items (genre) 
+VALUES
+('buzz'),
+('foo'), 
+('foo'), 
+('foo'), 
+('foo'), 
+('bar');
+
+SELECT genre, SUM(items_count), SUM(albums_count)
+FROM (
+	SELECT genre, count(id) AS items_count, 0 AS albums_count FROM items GROUP BY genre
+	UNION ALL
+	SELECT genre, 0, count(id) FROM albums GROUP BY genre
+	ORDER BY genre
+)
+GROUP BY genre
